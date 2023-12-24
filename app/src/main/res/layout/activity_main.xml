@@ -11,17 +11,16 @@
         android:textColor="@color/battery_circle_charging"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/wallpaper_description"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:lineSpacingMultiplier="1.2"
-        android:gravity="left"
+        android:gravity="start"
         android:id="@+id/descriptionTextView" android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp" android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp" android:layout_marginBottom="10dp"/>
+        android:layout_marginTop="20dp" android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp" android:layout_marginBottom="10dp"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/lowerFrameLayout"
         android:layout_below="@+id/descriptionTextView">
@@ -41,7 +40,7 @@
                     android:id="@+id/wifiEnableButton"
                     android:layout_width="38dp"
                     android:layout_height="38dp"
-                    android:layout_gravity="right|center"
+                    android:layout_gravity="end|center"
                     android:layout_margin="20dp"
                     android:background="@drawable/menu_checkbox_unselected"
                     android:text="" />
@@ -50,7 +49,7 @@
                     android:id="@+id/imageView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left|center"
+                    android:layout_gravity="start|center"
                     android:layout_margin="20dp"
                     android:src="@drawable/menu_wifi_icon" />
 
@@ -58,14 +57,14 @@
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left|center"
+                    android:layout_gravity="start|center"
                     android:layout_marginBottom="30dp"
-                    android:layout_marginLeft="110dp"
+                    android:layout_marginStart="110dp"
                     android:layout_marginTop="30dp"
                     android:text="Wi-Fi + Cellular"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/battery_circle_charging"
-                    android:textSize="14dp" />
+                    android:textSize="14sp" />
             </FrameLayout>
 
             <FrameLayout
@@ -78,15 +77,15 @@
                     android:id="@+id/batteryIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left|center"
-                    android:layout_marginLeft="20dp"
+                    android:layout_gravity="start|center"
+                    android:layout_marginStart="20dp"
                     android:src="@drawable/menu_battery_icon" />
 
                 <com.androidexperiments.meter.widget.CustomToggleButton
                     android:id="@+id/batteryEnableButton"
                     android:layout_width="38dp"
                     android:layout_height="38dp"
-                    android:layout_gravity="right|center"
+                    android:layout_gravity="end|center"
                     android:layout_margin="20dp"
                     android:background="@drawable/menu_checkbox_unselected"
                     android:text="" />
@@ -95,14 +94,14 @@
                     android:id="@+id/textView7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left|center"
+                    android:layout_gravity="start|center"
                     android:layout_marginBottom="30dp"
-                    android:layout_marginLeft="110dp"
+                    android:layout_marginStart="110dp"
                     android:layout_marginTop="30dp"
                     android:text="Battery"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/battery_circle_charging"
-                    android:textSize="14dp" />
+                    android:textSize="14sp" />
             </FrameLayout>
 
             <FrameLayout
@@ -114,7 +113,7 @@
                     android:id="@+id/notificationsIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left|center"
+                    android:layout_gravity="start|center"
                     android:layout_margin="20dp"
                     android:src="@drawable/menu_notifications_icon" />
 
@@ -122,20 +121,20 @@
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left|center"
+                    android:layout_gravity="start|center"
                     android:layout_marginBottom="30dp"
-                    android:layout_marginLeft="110dp"
+                    android:layout_marginStart="110dp"
                     android:layout_marginTop="30dp"
                     android:text="Notifications"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/battery_circle_charging"
-                    android:textSize="14dp" />
+                    android:textSize="14sp" />
 
                 <com.androidexperiments.meter.widget.CustomToggleButton
                     android:id="@+id/notificationsEnableButton"
                     android:layout_width="38dp"
                     android:layout_height="38dp"
-                    android:layout_gravity="right|center"
+                    android:layout_gravity="end|center"
                     android:layout_margin="20dp"
                     android:background="@drawable/menu_checkbox_unselected"
                     android:text="" />
@@ -158,7 +157,7 @@
             android:background="@color/wifi_triangle_foreground"
             android:textColor="@color/action_bar_background"
             android:text="SET WALLPAPER"
-            android:textSize="21dp"
+            android:textSize="21sp"
             android:id="@+id/choseWallpaperButton" android:layout_gravity="center"/>
     </FrameLayout>
 </RelativeLayout>

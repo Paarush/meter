@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.androidexperiments.meter" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature
         android:name="android.software.live_wallpaper"
@@ -9,8 +8,12 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" android:maxSdkVersion="29"/>
+    <uses-permission android:name="android.permission.READ_BASIC_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"/>
+    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" tools:ignore="ProtectedPermissions"/>
 
 
     <application
@@ -20,24 +23,30 @@
         android:label="@string/app_name"
         android:theme="@style/CustomActionBarTheme" >
 
-        <activity
-            android:name="com.androidexperiments.meter.SplashScreenActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar">
+        <!-- <activity -->
+        <!--     android:name="com.androidexperiments.meter.SplashScreenActivity" -->
+        <!--     android:screenOrientation="portrait" -->
+        <!--     android:theme="@android:style/Theme.NoTitleBar" -->
+        <!--     android:exported="true" -->
+        <!--     tools:ignore="LockedOrientationActivity"> -->
+        <!--     <intent-filter> -->
+        <!--         <action android:name="android.intent.action.MAIN"/> -->
+        <!--         <category android:name="android.intent.category.LAUNCHER"/> -->
+        <!--     </intent-filter> -->
+        <!-- </activity> -->
+
+        <activity android:name="com.androidexperiments.meter.MainActivity"
+                  android:screenOrientation="portrait"
+                  android:exported="true"
+                  tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <activity android:name="com.androidexperiments.meter.MainActivity"
-                  android:label="@string/app_name"
-                  android:screenOrientation="portrait">
-        </activity>
         <activity android:name="com.androidexperiments.meter.LocalWebActivity"
-                  android:label="@string/app_name"
-                  android:screenOrientation="portrait">
+                  android:screenOrientation="portrait"
+                  tools:ignore="LockedOrientationActivity">
 
         </activity>
 
@@ -59,7 +68,8 @@
 
         <service
             android:name="com.androidexperiments.meter.NotificationService"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>

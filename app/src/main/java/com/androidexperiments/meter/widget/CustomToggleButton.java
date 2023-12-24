@@ -16,14 +16,15 @@ package com.androidexperiments.meter.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ToggleButton;
+import androidx.appcompat.widget.AppCompatToggleButton;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.androidexperiments.meter.R;
 
 /**
  * Render the ToggleButton as my drawable checkbox graphics
  */
-public class CustomToggleButton extends ToggleButton
+public class CustomToggleButton extends AppCompatToggleButton
 {
 
     public CustomToggleButton(Context context) {
@@ -44,7 +45,7 @@ public class CustomToggleButton extends ToggleButton
 
     private void updateBackground(){
         int drawable = isChecked() ? R.drawable.menu_checkbox_selected : R.drawable.menu_checkbox_unselected;
-        setBackground(getContext().getResources().getDrawable(drawable));
+        setBackground(ResourcesCompat.getDrawable(getResources(), drawable, null));
     }
 
 

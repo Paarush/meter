@@ -16,6 +16,7 @@ package com.androidexperiments.meter.drawers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Canvas;
@@ -69,7 +70,7 @@ public class NotificationsDrawer extends Drawer {
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(NotificationService.NOTIFICATION_UPDATE);
-        context.registerReceiver(notificationsReceiver, filter);
+        ContextCompat.registerReceiver(context, notificationsReceiver, filter, ContextCompat.RECEIVER_EXPORTED);
 
         // Load colors
         colors[0] = context.getResources().getColor(R.color.notifications_color_0);

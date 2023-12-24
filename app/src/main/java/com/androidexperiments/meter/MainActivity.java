@@ -26,9 +26,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -248,18 +248,13 @@ public class MainActivity extends Activity implements ActivityCompat.OnRequestPe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-
-            case R.id.open_settings:
-                moveToNotificationListenerSettings();
-                break;
-
-            case R.id.about:
-                moveToAbout();
-                break;
-            case R.id.licenses:
-            default:
-                moveToLicenses();
+        if (item.getItemId() ==  R.id.open_settings) {
+            moveToNotificationListenerSettings();
+	} else if (item.getItemId() ==  R.id.about) {
+            moveToAbout();
+	} else { //if (item.getItemId() ==  R.id.licenses) {
+            //default:
+            moveToLicenses();
         }
 
         return true;

@@ -42,6 +42,10 @@ public class WifiDrawer extends TriangleFillDrawer {
 
         this.label1 = "WIFI";
 
+	this.label2 = getWifiNetworkName(context);
+	this.percent = getWifiStrength(getWifiRSSI(context));
+	this._percent = (float) (this.percent-0.001);
+
         // Register for Wifi state change notifications
         IntentFilter ifilter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         ifilter.addAction(WifiManager.RSSI_CHANGED_ACTION);
@@ -75,13 +79,20 @@ public class WifiDrawer extends TriangleFillDrawer {
     };
 
     /**
+     * Parse wifi strength from RSSI
+     */
+    public float getWifiStrength(int rssi){
+        float level = WifiManager.calculateSignalLevel(rssi, 100);
+        level /= 100.0;
+        return level;
+    }
+
+    /**
      * Parse wifi strength from intent
      */
     public float getWifiStrength(Intent intent){
-        float level = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, -1);
-        level = WifiManager.calculateSignalLevel((int) level, 100);
-        level /= 100.0;
-        return level;
+        int level = intent.getIntExtra(WifiManager.EXTRA_NEW_RSSI, -1);
+        return getWifiStrength(level);
     }
 
     /**
@@ -106,6 +117,15 @@ public class WifiDrawer extends TriangleFillDrawer {
             ssid = "";
         }
         return ssid.replace("\"", "");
+    }
+
+    /**
+     * Parse wifi for RSSI
+     */
+    public int getWifiRSSI(Context context){
+        WifiManager mgr = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInfo = mgr.getConnectionInfo();
+        return wifiInfo.getRssi();
     }
 
 }

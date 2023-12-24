@@ -14,6 +14,8 @@
 
 package com.androidexperiments.meter.drawers;
 
+import android.os.Build;
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.provider.Settings;
@@ -22,13 +24,16 @@ import android.telephony.CellInfoCdma;
 import android.telephony.CellInfoGsm;
 import android.telephony.CellInfoLte;
 import android.telephony.CellInfoWcdma;
+import android.telephony.CellInfoTdscdma;
 import android.telephony.CellSignalStrengthCdma;
 import android.telephony.CellSignalStrengthGsm;
 import android.telephony.CellSignalStrengthLte;
 import android.telephony.CellSignalStrengthWcdma;
+import android.telephony.CellSignalStrengthTdscdma;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
+import android.telephony.TelephonyDisplayInfo;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -44,6 +49,7 @@ public class CellularDrawer extends TriangleFillDrawer {
 
 
     private boolean firstRead = true;
+    private int overrideNetworkType = TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NONE;
 
     private static boolean isAirplaneModeOn(Context context)
     {
@@ -66,7 +72,14 @@ public class CellularDrawer extends TriangleFillDrawer {
         tManager = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
         setLabel2();
 
+	int listenFlags = PhoneStateListener.LISTEN_SIGNAL_STRENGTHS | PhoneStateListener.LISTEN_SERVICE_STATE;
+
+	if (Build.VERSION.SDK_INT >= 30) {
+	    listenFlags = listenFlags | PhoneStateListener.LISTEN_DISPLAY_INFO_CHANGED;
+	}
+
         tManager.listen(new PhoneStateListener(){
+            @TargetApi(18)
             @Override
             public void onSignalStrengthsChanged(SignalStrength signalStrength) {
                 super.onSignalStrengthsChanged(signalStrength);
@@ -117,6 +130,13 @@ public class CellularDrawer extends TriangleFillDrawer {
                             level = cdma.getLevel();
                             tech = "cdma";
                         }
+                    } else if (Build.VERSION.SDK_INT >= 29 && info instanceof CellInfoTdscdma) {
+                        final CellSignalStrengthTdscdma tdscdma = ((CellInfoTdscdma) info).getCellSignalStrength();
+
+                        if(level < tdscdma.getLevel()) {
+                            level = tdscdma.getLevel();
+                            tech = "tdscdma";
+                        }
                     } else if (info instanceof CellInfoLte) {
                         final CellSignalStrengthLte lte = ((CellInfoLte) info).getCellSignalStrength();
 
@@ -144,7 +164,18 @@ public class CellularDrawer extends TriangleFillDrawer {
                 setLabel2();
                 Log.d(TAG,"STATE "+String.valueOf(serviceState)+"   "+serviceState.getState());
             }
-        },PhoneStateListener.LISTEN_SIGNAL_STRENGTHS | PhoneStateListener.LISTEN_SERVICE_STATE);
+
+	    @TargetApi(30)
+	    @Override
+	    public void onDisplayInfoChanged(TelephonyDisplayInfo telephonyDisplayInfo) {
+                try {
+                    super.onDisplayInfoChanged(telephonyDisplayInfo);
+		    overrideNetworkType = telephonyDisplayInfo.getOverrideNetworkType();
+		} catch (SecurityException se){
+		    return;
+		}
+	    }
+        },listenFlags);
 
     }
 
@@ -154,32 +185,65 @@ public class CellularDrawer extends TriangleFillDrawer {
         if(!type.equals("Unknown")) {
             label2 += " " + type;
         }
+            try {
+                label2 += " " + tManager.getNetworkType();
+            } catch (SecurityException se) {
+                label2 += " <SE>";
+            }
     }
 
 
+    @TargetApi(1)
     protected String getNetworkType(){
-        switch (tManager.getNetworkType()) {
-            case TelephonyManager.NETWORK_TYPE_GPRS:
-            case TelephonyManager.NETWORK_TYPE_EDGE:
-            case TelephonyManager.NETWORK_TYPE_CDMA:
-            case TelephonyManager.NETWORK_TYPE_1xRTT:
-            case TelephonyManager.NETWORK_TYPE_IDEN:
-                return "2G";
-            case TelephonyManager.NETWORK_TYPE_UMTS:
-            case TelephonyManager.NETWORK_TYPE_EVDO_0:
-            case TelephonyManager.NETWORK_TYPE_EVDO_A:
-            case TelephonyManager.NETWORK_TYPE_HSDPA:
-            case TelephonyManager.NETWORK_TYPE_HSUPA:
-            case TelephonyManager.NETWORK_TYPE_HSPA:
-            case TelephonyManager.NETWORK_TYPE_EVDO_B:
-            case TelephonyManager.NETWORK_TYPE_EHRPD:
-            case TelephonyManager.NETWORK_TYPE_HSPAP:
-                return "3G";
-            case TelephonyManager.NETWORK_TYPE_LTE:
-                return "4G";
-            default:
-                return "Unknown";
-        }
+	try {
+            int type;
+	    if (Build.VERSION.SDK_INT >= 24) {
+	        type = tManager.getDataNetworkType();
+	    } else {
+	        type = tManager.getNetworkType();
+	    }
+            switch (type) {
+                case TelephonyManager.NETWORK_TYPE_GPRS:
+                case TelephonyManager.NETWORK_TYPE_EDGE:
+                case TelephonyManager.NETWORK_TYPE_CDMA:
+                case TelephonyManager.NETWORK_TYPE_1xRTT:
+                case TelephonyManager.NETWORK_TYPE_IDEN:
+                    return "2G";
+                case TelephonyManager.NETWORK_TYPE_UMTS:
+                case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                case TelephonyManager.NETWORK_TYPE_HSDPA:
+                case TelephonyManager.NETWORK_TYPE_HSUPA:
+                case TelephonyManager.NETWORK_TYPE_HSPA:
+                case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                case TelephonyManager.NETWORK_TYPE_EHRPD:
+                case TelephonyManager.NETWORK_TYPE_HSPAP:
+                    return "3G";
+                case TelephonyManager.NETWORK_TYPE_LTE:
+		    if (Build.VERSION.SDK_INT >= 33){
+			    switch(overrideNetworkType){
+				    case TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NONE:
+				    case TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_LTE_CA:
+					return "4G";
+				    case TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_LTE_ADVANCED_PRO:
+					return "4G+";
+				    case TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA:
+					return "5G";
+				    case TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_ADVANCED:
+				    case TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_NR_NSA_MMWAVE:
+					return "5G+";
+			    }
+		    } else {
+                        return "4G";
+		    }
+                case TelephonyManager.NETWORK_TYPE_NR:
+                    return "5G";
+                default:
+                    return "Unknown";
+            }
+	} catch (SecurityException se) {
+            return "Unknown";
+	}
     }
 
 }

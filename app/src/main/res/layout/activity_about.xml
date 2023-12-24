@@ -13,11 +13,11 @@
     <ImageButton android:id="@+id/closeButton"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_gravity="top|right"
+        android:layout_gravity="top|end"
         android:background="@drawable/menu_close"
         android:contentDescription="close-button"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="15dp"
-        android:layout_marginRight="15dp"/>
+        android:layout_marginEnd="15dp"/>
 </RelativeLayout>
