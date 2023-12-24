@@ -170,8 +170,10 @@ public class CellularDrawer extends TriangleFillDrawer {
 	    public void onDisplayInfoChanged(TelephonyDisplayInfo telephonyDisplayInfo) {
                 try {
                     super.onDisplayInfoChanged(telephonyDisplayInfo);
-		    overrideNetworkType = telephonyDisplayInfo.getOverrideNetworkType();
+		    CellularDrawer.this.overrideNetworkType = telephonyDisplayInfo.getOverrideNetworkType();
+		    Log.d(TAG,"overrideNetworkType "+String.valueOf(telephonyDisplayInfo)+"   "+telephonyDisplayInfo.getOverrideNetworkType());
 		} catch (SecurityException se){
+                    Log.e(TAG, se.toString());
 		    return;
 		}
 	    }
@@ -185,11 +187,6 @@ public class CellularDrawer extends TriangleFillDrawer {
         if(!type.equals("Unknown")) {
             label2 += " " + type;
         }
-            try {
-                label2 += " " + tManager.getNetworkType();
-            } catch (SecurityException se) {
-                label2 += " <SE>";
-            }
     }
 
 
